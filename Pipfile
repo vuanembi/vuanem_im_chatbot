@@ -12,6 +12,8 @@ jinja2 = "*"
 [dev-packages]
 black = "*"
 pytest = "*"
+functions-framework = "*"
+pytest-dotenv = "*"
 
 [requires]
 python_version = "3.8"

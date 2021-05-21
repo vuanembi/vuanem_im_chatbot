@@ -3,7 +3,7 @@ SELECT
     *
 FROM (
     SELECT
-        DATE(TRANDATE) AS date,
+        DATE(date) AS date,
         {% for metric in section.metrics %}
             {{ Metric.metric_row(metric) }}
             {% if not loop.last %}
@@ -13,4 +13,4 @@ FROM (
     FROM
         Analytics._agg_Slack_Report
 )
-WHERE date = CURRENT_DATE()
+WHERE DATE(date) = CURRENT_DATE()

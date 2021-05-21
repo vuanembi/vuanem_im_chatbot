@@ -10,6 +10,7 @@ from google.cloud import bigquery
 class Report(metaclass=ABCMeta):
     def __init__(self):
         self.bq_client = bigquery.Client()
+        self.sections = []
 
     @staticmethod
     def create(mode):
@@ -19,7 +20,6 @@ class Report(metaclass=ABCMeta):
             return ReportRealtime()
 
     def add_section(self, name, metrics):
-        self.sections = []
         section = self._add_section(name, metrics, self.bq_client)
         self.sections.append(section)
 
@@ -44,15 +44,16 @@ class Report(metaclass=ABCMeta):
         payload["channel"] = os.getenv("CHANNEL_ID")
         blocks = []
         blocks.extend(self.compose_header())
-        blocks.extend(rows)
+        for row in rows:
+            blocks.append({"type": "divider"})
+            blocks.append(row)
         payload["blocks"] = blocks
         return payload
 
     def compose_header(self):
         title = self._compose_title()
         prelude = self._compose_prelude()
-        divider = {"type": "divider"}
-        return [title, prelude, divider]
+        return [title, prelude]
 
     @abstractmethod
     def _compose_title(self):
@@ -149,7 +150,7 @@ class Section:
     def __init__(self, name, metrics, mode, bq_client):
         self.section_name = name
         self.bq_client = bq_client
-        self.metrics = [Metric.factory(metric, mode) for metric in metrics]
+        self.metrics = [Metric.factory(metric[0], mode, metric[1]) for metric in metrics]
 
     def fetch_data(self):
         loader = jinja2.FileSystemLoader(searchpath="./queries")
@@ -197,16 +198,17 @@ class Section:
 
 
 class Metric(metaclass=ABCMeta):
-    def __init__(self, name):
+    def __init__(self, name, agg):
         self.metric_name = name
+        self.agg = agg
         self.title = f"*{self.metric_name}*"
 
     @staticmethod
-    def factory(name, mode):
+    def factory(name, mode, agg):
         if mode == "realtime":
-            return MetricRealtime(name)
+            return MetricRealtime(name, agg)
         elif mode == "daily":
-            return MetricDaily(name)
+            return MetricDaily(name, agg)
         else:
             raise NotImplementedError("Metric mode not found")
 
@@ -243,8 +245,8 @@ class Metric(metaclass=ABCMeta):
 
 
 class MetricRealtime(Metric):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name, agg):
+        super().__init__(name, agg)
 
     def _compose_text(self):
         self.format_value()
@@ -252,8 +254,8 @@ class MetricRealtime(Metric):
 
 
 class MetricDaily(Metric):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name, agg):
+        super().__init__(name, agg)
 
     def _compose_text(self):
         self.compare, self.emoji = self._compare()
@@ -268,7 +270,7 @@ class MetricDaily(Metric):
         if self.d2 > 0:
             compare = ((self.d1 - self.d2) / self.d2) * 100
             if compare > 0:
-                emoji = "Tăng :heart:"
+                emoji = "Tăng :small_red_triangle:"
             else:
-                emoji = "Giảm :broken_heart:"
+                emoji = "Giảm :small_red_triangle_down:"
         return compare, emoji
