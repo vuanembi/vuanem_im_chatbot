@@ -1,4 +1,3 @@
-from os import truncate
 from unittest.mock import Mock
 
 from main import main

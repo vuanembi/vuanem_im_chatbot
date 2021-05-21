@@ -28,11 +28,24 @@ class Report(metaclass=ABCMeta):
         raise NotImplementedError
 
     def fetch_data(self):
-        with requests.get(
-            "https://shibe.online/api/shibes", params={"count": len(self.sections)}
-        ) as r:
+        # with requests.get(
+        #     "https://shibe.online/api/shibes", params={"count": len(self.sections)}
+        # ) as r:
+        #     res = r.json()
+        headers = {
+            "Accept-Version": "v1"
+        }
+        params = {
+            "client_id": os.getenv('UNSPLASH_CLIENT_ID'),
+            "query": "interior",
+            "orientation": "squarish",
+            "content_filter": "low",
+            "count": len(self.sections)
+        }
+        with requests.get("https://api.unsplash.com/photos/random", headers=headers, params=params) as r:
             res = r.json()
-        rows = [section.build(res[i]) for i, section in enumerate(self.sections)]
+        urls = [i['urls']['small'] for i in res]
+        rows = [section.build(urls[i]) for i, section in enumerate(self.sections)]
         return rows
 
     def build(self):

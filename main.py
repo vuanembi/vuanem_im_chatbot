@@ -3,6 +3,30 @@ import requests
 
 from models import Report
 
+sales = (
+    "Sales",
+    [
+        ("SalesOrder", "SUM"),
+        ("Transactions", "SUM"),
+        ("AOV", "AVG"),
+        ("AUSP", "AVG"),
+    ],
+)
+
+marketing = ("Marketing", [("DigitalSpend", "SUM")])
+
+
+def report_factory(mode):
+    report = Report.create(mode)
+    if mode == "daily":
+        report.add_section(*sales)
+        report.add_section(*marketing)
+    elif mode == "realtime":
+        report.add_section(*sales)
+    else:
+        raise RuntimeError("Mode not found")
+    return report
+
 
 def push(payload):
     token = os.getenv("TOKEN")
@@ -16,26 +40,6 @@ def push(payload):
     ) as r:
         res = r.json()
     return res
-
-
-def report_factory(mode):
-    report = Report.create(mode)
-    if mode == "daily":
-        report.add_section(
-            "Sales",
-            [
-                ("SalesOrder", "SUM"),
-                ("Transactions", "SUM"),
-                ("AOV", "AVG"),
-                ("AUSP", "AVG"),
-            ],
-        )
-        report.add_section("Marketing", [("DigitalSpend", "SUM")])
-    elif mode == "realtime":
-        report.add_section("Sales", ["SalesOrder", "Transactions", "AOV", "AUSP"])
-    else:
-        raise RuntimeError("Mode not found")
-    return report
 
 
 def main(request):
