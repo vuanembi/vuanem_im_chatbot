@@ -1,0 +1,8 @@
+{% macro metric_row(metric) -%}
+STRUCT(
+    {{ metric.metric_name }} AS d0,
+    LAG({{ metric.metric_name }}, 1) OVER (ORDER BY TRANDATE) AS d1,
+    LAG({{ metric.metric_name }}, 2) OVER (ORDER BY TRANDATE) AS d2,
+    SUM({{ metric.metric_name }}) OVER (PARTITION BY TIMESTAMP_TRUNC(TRANDATE, MONTH)) AS mtd
+) AS {{ metric.metric_name }}
+{%- endmacro %}

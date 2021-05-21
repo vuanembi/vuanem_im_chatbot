@@ -1,0 +1,274 @@
+{
+    "ok": true,
+    "channels": [
+        {
+            "id": "C84ARBU00",
+            "name": "general",
+            "is_channel": true,
+            "is_group": false,
+            "is_im": false,
+            "created": 1511507953,
+            "is_archived": false,
+            "is_general": true,
+            "unlinked": 0,
+            "name_normalized": "general",
+            "is_shared": false,
+            "parent_conversation": null,
+            "creator": "U84TWA0NP",
+            "is_ext_shared": false,
+            "is_org_shared": false,
+            "shared_team_ids": [
+                "T84ARBN1E"
+            ],
+            "pending_shared": [],
+            "pending_connected_team_ids": [],
+            "is_pending_ext_shared": false,
+            "is_member": false,
+            "is_private": false,
+            "is_mpim": false,
+            "topic": {
+                "value": "Company-wide announcements and work-based matters",
+                "creator": "U84TWA0NP",
+                "last_set": 1511507953
+            },
+            "purpose": {
+                "value": "This channel is for workspace-wide communication and announcements. All members are in this channel.",
+                "creator": "U84TWA0NP",
+                "last_set": 1511507953
+            },
+            "previous_names": [],
+            "num_members": 58
+        },
+        {
+            "id": "C854V1TNZ",
+            "name": "random",
+            "is_channel": true,
+            "is_group": false,
+            "is_im": false,
+            "created": 1511507953,
+            "is_archived": false,
+            "is_general": false,
+            "unlinked": 0,
+            "name_normalized": "random",
+            "is_shared": false,
+            "parent_conversation": null,
+            "creator": "U84TWA0NP",
+            "is_ext_shared": false,
+            "is_org_shared": false,
+            "shared_team_ids": [
+                "T84ARBN1E"
+            ],
+            "pending_shared": [],
+            "pending_connected_team_ids": [],
+            "is_pending_ext_shared": false,
+            "is_member": false,
+            "is_private": false,
+            "is_mpim": false,
+            "topic": {
+                "value": "Non-work banter and water cooler conversation",
+                "creator": "U84TWA0NP",
+                "last_set": 1511507953
+            },
+            "purpose": {
+                "value": "A place for non-work-related flimflam, faffing, hodge-podge or jibber-jabber you'd prefer to keep out of more focused work-related channels.",
+                "creator": "U84TWA0NP",
+                "last_set": 1511507953
+            },
+            "previous_names": [],
+            "num_members": 57
+        },
+        {
+            "id": "C8CFT59DL",
+            "name": "erp",
+            "is_channel": true,
+            "is_group": false,
+            "is_im": false,
+            "created": 1512716339,
+            "is_archived": false,
+            "is_general": false,
+            "unlinked": 0,
+            "name_normalized": "erp",
+            "is_shared": false,
+            "parent_conversation": null,
+            "creator": "U850NANQJ",
+            "is_ext_shared": false,
+            "is_org_shared": false,
+            "shared_team_ids": [
+                "T84ARBN1E"
+            ],
+            "pending_shared": [],
+            "pending_connected_team_ids": [],
+            "is_pending_ext_shared": false,
+            "is_member": false,
+            "is_private": false,
+            "is_mpim": false,
+            "topic": {
+                "value": "",
+                "creator": "",
+                "last_set": 0
+            },
+            "purpose": {
+                "value": "Team ERP",
+                "creator": "U850NANQJ",
+                "last_set": 1512716340
+            },
+            "previous_names": [],
+            "num_members": 5
+        },
+        {
+            "id": "C0223HTUBMG",
+            "name": "team-hoa-h\u1eadu",
+            "is_channel": true,
+            "is_group": false,
+            "is_im": false,
+            "created": 1621251440,
+            "is_archived": false,
+            "is_general": false,
+            "unlinked": 0,
+            "name_normalized": "team-hoa-h\u1eadu",
+            "is_shared": false,
+            "parent_conversation": null,
+            "creator": "U022A40JXK3",
+            "is_ext_shared": false,
+            "is_org_shared": false,
+            "shared_team_ids": [
+                "T84ARBN1E"
+            ],
+            "pending_shared": [],
+            "pending_connected_team_ids": [],
+            "is_pending_ext_shared": false,
+            "is_member": false,
+            "is_private": false,
+            "is_mpim": false,
+            "topic": {
+                "value": "",
+                "creator": "",
+                "last_set": 0
+            },
+            "purpose": {
+                "value": "TEAM C&amp;B",
+                "creator": "U022A40JXK3",
+                "last_set": 1621251441
+            },
+            "previous_names": [],
+            "num_members": 3
+        },
+        {
+            "id": "C0223J4TCTC",
+            "name": "thu-h\u00fat-nh\u00e2n-t\u00e0i",
+            "is_channel": true,
+            "is_group": false,
+            "is_im": false,
+            "created": 1621251676,
+            "is_archived": false,
+            "is_general": false,
+            "unlinked": 0,
+            "name_normalized": "thu-hut-nhan-tai",
+            "is_shared": false,
+            "parent_conversation": null,
+            "creator": "U021XNSQWAF",
+            "is_ext_shared": false,
+            "is_org_shared": false,
+            "shared_team_ids": [
+                "T84ARBN1E"
+            ],
+            "pending_shared": [],
+            "pending_connected_team_ids": [],
+            "is_pending_ext_shared": false,
+            "is_member": false,
+            "is_private": false,
+            "is_mpim": false,
+            "topic": {
+                "value": "",
+                "creator": "",
+                "last_set": 0
+            },
+            "purpose": {
+                "value": "Thu h\u00fat nh\u00e2n t\u00e0i Vua N\u1ec7m",
+                "creator": "U021XNSQWAF",
+                "last_set": 1621251856
+            },
+            "previous_names": [],
+            "num_members": 6
+        },
+        {
+            "id": "C022M9R9F6U",
+            "name": "bod-hr",
+            "is_channel": true,
+            "is_group": false,
+            "is_im": false,
+            "created": 1620987716,
+            "is_archived": false,
+            "is_general": false,
+            "unlinked": 0,
+            "name_normalized": "bod-hr",
+            "is_shared": false,
+            "parent_conversation": null,
+            "creator": "U021PEDTWTX",
+            "is_ext_shared": false,
+            "is_org_shared": false,
+            "shared_team_ids": [
+                "T84ARBN1E"
+            ],
+            "pending_shared": [],
+            "pending_connected_team_ids": [],
+            "is_pending_ext_shared": false,
+            "is_member": false,
+            "is_private": false,
+            "is_mpim": false,
+            "topic": {
+                "value": "",
+                "creator": "",
+                "last_set": 0
+            },
+            "purpose": {
+                "value": "",
+                "creator": "",
+                "last_set": 0
+            },
+            "previous_names": [],
+            "num_members": 7
+        },
+        {
+            "id": "C022WMH56KA",
+            "name": "bi-bot",
+            "is_channel": true,
+            "is_group": false,
+            "is_im": false,
+            "created": 1621310885,
+            "is_archived": false,
+            "is_general": false,
+            "unlinked": 0,
+            "name_normalized": "bi-bot",
+            "is_shared": false,
+            "parent_conversation": null,
+            "creator": "U021MD3HA79",
+            "is_ext_shared": false,
+            "is_org_shared": false,
+            "shared_team_ids": [
+                "T84ARBN1E"
+            ],
+            "pending_shared": [],
+            "pending_connected_team_ids": [],
+            "is_pending_ext_shared": false,
+            "is_member": true,
+            "is_private": false,
+            "is_mpim": false,
+            "topic": {
+                "value": "",
+                "creator": "",
+                "last_set": 0
+            },
+            "purpose": {
+                "value": "",
+                "creator": "",
+                "last_set": 0
+            },
+            "previous_names": [],
+            "num_members": 2
+        }
+    ],
+    "response_metadata": {
+        "next_cursor": ""
+    }
+}

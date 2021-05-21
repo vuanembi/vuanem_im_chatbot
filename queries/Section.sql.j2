@@ -1,0 +1,16 @@
+{% import "metric.sql.j2" as Metric %}
+SELECT
+    *
+FROM (
+    SELECT
+        DATE(TRANDATE) AS date,
+        {% for metric in section.metrics %}
+            {{ Metric.metric_row(metric) }}
+            {% if not loop.last %}
+            ,
+            {% endif %}
+        {%- endfor %}
+    FROM
+        Analytics._agg_Slack_Report
+)
+WHERE date = CURRENT_DATE()
