@@ -3,6 +3,6 @@ STRUCT(
     {{ metric.metric_name }} AS d0,
     LAG({{ metric.metric_name }}, 1) OVER (ORDER BY date) AS d1,
     LAG({{ metric.metric_name }}, 2) OVER (ORDER BY date) AS d2,
-    {{ metric.agg }}({{ metric.metric_name }}) OVER (PARTITION BY TIMESTAMP_TRUNC(date, MONTH)) AS mtd
+    {{ metric.agg }}({{ metric.metric_name }}) OVER (PARTITION BY TIMESTAMP_TRUNC(date, MONTH) ORDER BY date ASC ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) AS mtd
 ) AS {{ metric.metric_name }}
 {%- endmacro %}

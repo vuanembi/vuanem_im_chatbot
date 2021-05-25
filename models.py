@@ -28,10 +28,6 @@ class Report(metaclass=ABCMeta):
         raise NotImplementedError
 
     def fetch_data(self):
-        # with requests.get(
-        #     "https://shibe.online/api/shibes", params={"count": len(self.sections)}
-        # ) as r:
-        #     res = r.json()
         headers = {
             "Accept-Version": "v1"
         }
@@ -247,12 +243,16 @@ class Metric(metaclass=ABCMeta):
         ]
 
     def _format_value(self, value):
-        if value >= 1e9:
+        if value is None:
+            return f"Missing Value"
+        elif value >= 1e9:
             return f"{value/1e9:.2f} B"
         elif value >= 1e6:
             return f"{value/1e6:.2f} M"
         elif value >= 1e3:
             return f"{value/1e3:.2f} K"
+        elif value <= 1:
+            return f"{value*1e2:.2f} %"
         else:
             return value
 
@@ -280,10 +280,13 @@ class MetricDaily(Metric):
         return text
 
     def _compare(self):
-        if self.d2 > 0:
+        if self.d2 > 0 and self.d1 > 0:
             compare = ((self.d1 - self.d2) / self.d2) * 100
             if compare > 0:
                 emoji = "Tăng :small_red_triangle:"
             else:
                 emoji = "Giảm :small_red_triangle_down:"
+        else:
+            compare = 0
+            emoji = 'Missing Value'
         return compare, emoji

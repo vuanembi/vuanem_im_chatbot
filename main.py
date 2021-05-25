@@ -10,10 +10,23 @@ sales = (
         ("Transactions", "SUM"),
         ("AOV", "AVG"),
         ("AUSP", "AVG"),
+        ("AUSPMattress", "AVG"),
+        ("StoreTraffic", "SUM"),
     ],
 )
 
-marketing = ("Marketing", [("DigitalSpend", "SUM")])
+marketing = (
+    "Marketing",
+    [
+        ("FacebookSpend", "SUM"),
+        ("GoogleSpend", "SUM"),
+        ("TotalLeads", "SUM"),
+        ("PhonesCollected", "SUM"),
+        ("AcquiredCustomers", "SUM"),
+        ("FunnelCR", "AVG"),
+        ("FunnelRevenue", "SUM"),
+    ],
+)
 
 
 def report_factory(mode):

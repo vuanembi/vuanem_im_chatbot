@@ -114,11 +114,11 @@
         },
         "google-cloud-bigquery": {
             "hashes": [
-                "sha256:69ce0d64cf06e4163072898ed50623af30c4601fb11f972cbde85c355bb45a89",
-                "sha256:cb88d27522d88a2fb41e9f330d8f835c4abd9c341815fe1bf8fe4bb82d3436dd"
+                "sha256:88ed16b2a5761ad2eebd4a6e23f7f022630291c92410c123b04f77bbda9ad469",
+                "sha256:922d8ed28262793b6a9d23e10ffc785963f3e574686c77a3ed57c93acdc42200"
             ],
             "index": "pypi",
-            "version": "==2.16.1"
+            "version": "==2.17.0"
         },
         "google-cloud-core": {
             "hashes": [
@@ -443,14 +443,6 @@
             ],
             "version": "==1.4.4"
         },
-        "atomicwrites": {
-            "hashes": [
-                "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197",
-                "sha256:ae70396ad1a434f9c7046fd2dd196fc04b12f9e91ffb859164193be8b6168a7a"
-            ],
-            "markers": "sys_platform == 'win32'",
-            "version": "==1.4.0"
-        },
         "attrs": {
             "hashes": [
                 "sha256:149e90d6d8ac20db7a955ad60cf0e6881a3f20d37096140088356da6c716b0b1",
@@ -482,14 +474,6 @@
             ],
             "version": "==1.2.0"
         },
-        "colorama": {
-            "hashes": [
-                "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b",
-                "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"
-            ],
-            "markers": "sys_platform == 'win32'",
-            "version": "==0.4.4"
-        },
         "deprecation": {
             "hashes": [
                 "sha256:72b3bde64e5d778694b0cf68178aed03d15e15477116add3fb773e581f9518ff",
@@ -512,6 +496,14 @@
             ],
             "index": "pypi",
             "version": "==2.1.3"
+        },
+        "gunicorn": {
+            "hashes": [
+                "sha256:9dcc4547dbb1cb284accfb15ab5667a0e5d1881cc443e0677b4882a4067a807e",
+                "sha256:e0a968b5ba15f8a328fdfd7ab1fcb5af4470c28aaf7e55df02a99bc13138e6e8"
+            ],
+            "markers": "platform_system != 'Windows'",
+            "version": "==20.1.0"
         },
         "iniconfig": {
             "hashes": [
