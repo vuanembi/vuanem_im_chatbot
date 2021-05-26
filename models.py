@@ -8,16 +8,18 @@ from google.cloud import bigquery
 
 
 class Report(metaclass=ABCMeta):
-    def __init__(self):
+    def __init__(self, name, channel_id):
+        self.report_name = name
+        self.channel_id = channel_id
         self.bq_client = bigquery.Client()
         self.sections = []
 
     @staticmethod
-    def create(mode):
+    def create(name, mode, channel_id):
         if mode == "daily":
-            return ReportDaily()
+            return ReportDaily(name, channel_id)
         elif mode == "realtime":
-            return ReportRealtime()
+            return ReportRealtime(name, channel_id)
 
     def add_section(self, name, metrics):
         section = self._add_section(name, metrics, self.bq_client)
@@ -33,7 +35,7 @@ class Report(metaclass=ABCMeta):
         }
         params = {
             "client_id": os.getenv('UNSPLASH_CLIENT_ID'),
-            "query": "interior",
+            "query": "burger",
             "orientation": "squarish",
             "content_filter": "low",
             "count": len(self.sections)
@@ -50,7 +52,7 @@ class Report(metaclass=ABCMeta):
 
     def compose(self, rows):
         payload = {}
-        payload["channel"] = os.getenv("CHANNEL_ID")
+        payload["channel"] = self.channel_id
         blocks = []
         blocks.extend(self.compose_header())
         for row in rows:
@@ -72,10 +74,21 @@ class Report(metaclass=ABCMeta):
     def _compose_prelude(self):
         raise NotImplementedError
 
+    def push(self):
+        token = os.getenv("TOKEN")
+        headers = {
+            "charset": "utf-8",
+            "Content-type": "application/json",
+            "Authorization": f"Bearer {token}",
+        }
+        with requests.post(
+            "https://slack.com/api/chat.postMessage", headers=headers, json=self.build()
+        ) as r:
+            r.raise_for_status()
 
 class ReportDaily(Report):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name, channel_id):
+        super().__init__(name, channel_id)
 
     def _add_section(self, name, metrics, bq_client):
         return Section(name, metrics, "daily", bq_client)
@@ -86,7 +99,7 @@ class ReportDaily(Report):
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": f"Daily Report {now:%Y-%m-%d}",
+                "text": f"Daily {self.report_name} Report {now:%Y-%m-%d}",
                 "emoji": True,
             },
         }
@@ -102,8 +115,8 @@ class ReportDaily(Report):
 
 
 class ReportRealtime(Report):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name, channel_id):
+        super().__init__(name, channel_id)
 
     def _add_section(self, name, metrics, bq_client):
         return Section(name, metrics, "realtime", bq_client)
@@ -114,7 +127,7 @@ class ReportRealtime(Report):
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": f"Realtime Report {now:%Y-%m-%d}",
+                "text": f"Realtime {self.name} Report {now:%Y-%m-%d}",
                 "emoji": True,
             },
         }
