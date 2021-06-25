@@ -262,7 +262,7 @@ class MetricRealtime(Metric):
 
     def _compose_text(self):
         self.format_value()
-        return f"> :small_blue_diamond: Today: {self.d0}"
+        return f"> Today: {self.d0}"
 
 
 class MetricDaily(Metric):
@@ -274,9 +274,9 @@ class MetricDaily(Metric):
     def _compose_text(self):
         self.compare, self.emoji = self._compare()
         self.format_value()
-        dod = f"> - Y-day: {self.d1}"
-        compare = f"> - {self.emoji} {self.compare:.2f}%"
-        mtd = f"> - MTD : {self.mtd}"
+        dod = f"> Y-day: {self.d1}"
+        compare = f"> {self.emoji} {self.compare:.2f}%"
+        mtd = f"> MTD : {self.mtd}"
         text = "\n".join([dod, compare, mtd])
         return text
 
