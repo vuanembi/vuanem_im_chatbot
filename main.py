@@ -65,7 +65,7 @@ def create_profit_report(channel_id="C025E8MVDR7", mode="daily"):
     return report
 
 
-def create_marketing_report(channel_id="C022BDGKU4A", mode="daily"):
+def create_marketing_report(channel_id="C025E8MVDR7", mode="daily"):
     report = Report.create("Marketing", mode, channel_id)
     report.add_section(*customers)
     # report.add_section(*spend)
@@ -86,30 +86,15 @@ def report_factory(mode):
         raise RuntimeError("Mode not found")
     return reports
 
-
-def push(payload):
-    token = os.getenv("TOKEN")
-    headers = {
-        "charset": "utf-8",
-        "Content-type": "application/json",
-        "Authorization": f"Bearer {token}",
-    }
-    with requests.post(
-        "https://slack.com/api/chat.postMessage", headers=headers, json=payload
-    ) as r:
-        res = r.json()
-    return res
-
-
 def main(request):
     request_json = request.get_json()
     if request_json:
         mode = request_json["mode"]
         reports = report_factory(mode)
-        loom = ThreadLoom(max_runner_cap=10)
+        # loom = ThreadLoom(max_runner_cap=10)
         for report in reports:
             report.push()
-        #     loom.add_function(report.push)
+        # loom.add_function(report.push)
         # output =  loom.execute()
         # return 
         return {"reports_pushed": len(reports)}

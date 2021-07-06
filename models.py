@@ -6,22 +6,47 @@ import jinja2
 import requests
 from google.cloud import bigquery
 
+BQ_CLIENT = bigquery.Client()
 
 class Report(metaclass=ABCMeta):
     def __init__(self, name, channel_id):
+        """Initialize Report
+
+        Args:
+            name (str): Report Name
+            channel_id (str): channel_id
+        """
+
         self.report_name = name
         self.channel_id = channel_id
-        self.bq_client = bigquery.Client()
         self.sections = []
 
     @staticmethod
     def create(name, mode, channel_id):
+        """Factory method
+
+        Args:
+            name (str): Report name
+            mode (str): Report mode
+            channel_id (str): channel_id
+
+        Returns:
+            Report: Report instance
+        """
+
         if mode == "daily":
             return ReportDaily(name, channel_id)
         elif mode == "realtime":
             return ReportRealtime(name, channel_id)
 
     def add_section(self, name, metrics):
+        """Add predefined sections to report
+
+        Args:
+            name (str): Section name
+            metrics (list): List of metrics tuple
+        """
+
         section = self._add_section(name, metrics, self.bq_client)
         self.sections.append(section)
 
@@ -30,27 +55,35 @@ class Report(metaclass=ABCMeta):
         raise NotImplementedError
 
     def fetch_data(self):
-        # headers = {"Accept-Version": "v1"}
-        # params = {
-        #     "client_id": os.getenv("UNSPLASH_CLIENT_ID"),
-        #     "query": "burger",
-        #     "orientation": "squarish",
-        #     "content_filter": "low",
-        #     "count": len(self.sections),
-        # }
-        # with requests.get(
-        #     "https://api.unsplash.com/photos/random", headers=headers, params=params
-        # ) as r:
-        #     res = r.json()
-        # urls = [i["urls"]["small"] for i in res]
+        """Fetch data into components
+
+        Returns:
+            list: List of results
+        """
+
         rows = [section.build() for section in self.sections]
         return rows
 
     def build(self):
+        """Build report componenets
+
+        Returns:
+            dict: Components
+        """
+
         rows = self.fetch_data()
         return self.compose(rows)
 
     def compose(self, rows):
+        """Compose components using ingested data
+
+        Args:
+            rows (list): List of results
+
+        Returns:
+            dict: Payload
+        """
+
         payload = {}
         payload["channel"] = self.channel_id
         blocks = []
@@ -59,23 +92,40 @@ class Report(metaclass=ABCMeta):
             blocks.append({"type": "divider"})
             blocks.append(row)
         payload["blocks"] = blocks
-        payload
         return payload
 
     def compose_header(self):
+        """Compose Header for report
+
+        Returns:
+            tuple: (title, prelude)
+        """        
+
         title = self._compose_title()
         prelude = self._compose_prelude()
         return [title, prelude]
 
     @abstractmethod
     def _compose_title(self):
+        """Compose Title
+
+        Raises:
+            NotImplementedError: Abstract Method
+        """
+
         raise NotImplementedError
 
     def _compose_prelude(self):
+        """Compose Prelude
+
+        Returns:
+            dict: Prelude section
+        """
+
         query = '''
         SELECT LastUpdated FROM Analytics._agg_Slack_Report
         '''
-        rows = self.bq_client.query(query).result()
+        rows = BQ_CLIENT.query(query).result()
         row = [row.values() for row in rows][0][0]
         tz = timezone(timedelta(hours=7))
         last_updated = row.astimezone(tz).strftime('%Y-%m-%dT%H:%M:%S%z')
@@ -89,6 +139,12 @@ class Report(metaclass=ABCMeta):
 
 
     def push(self):
+        """Push payload to Slack API
+
+        Returns:
+            bool: OK responses
+        """
+
         token = os.getenv("TOKEN")
         headers = {
             "charset": "utf-8",
@@ -96,7 +152,6 @@ class Report(metaclass=ABCMeta):
             "Authorization": f"Bearer {token}",
         }
         payload = self.build()
-        payload
         with requests.post(
             "https://slack.com/api/chat.postMessage", headers=headers, json=payload
         ) as r:
@@ -126,8 +181,8 @@ class ReportRealtime(Report):
     def __init__(self, name, channel_id):
         super().__init__(name, channel_id)
 
-    def _add_section(self, name, metrics, bq_client):
-        return Section(name, metrics, "realtime", bq_client)
+    def _add_section(self, name, metrics):
+        return Section(name, metrics, "realtime")
 
     def _compose_title(self):
         now = datetime.now()
@@ -141,9 +196,16 @@ class ReportRealtime(Report):
         }
 
 class Section:
-    def __init__(self, name, metrics, mode, bq_client):
+    def __init__(self, name, metrics, mode):
+        """Initialize Section
+
+        Args:
+            name (str): Section name
+            metrics (list): List of metrics tuple
+            mode (str): Section mode
+        """
+
         self.section_name = name
-        self.bq_client = bq_client
         self.metrics = [
             Metric.factory(
                 metric[0],
@@ -156,12 +218,28 @@ class Section:
         ]
 
     def safe_index(self, metric, i):
+        """Helper method to get index
+
+        Args:
+            metric (tuple): Metric
+            i (index): Index
+
+        Returns:
+            str: Value
+        """
+
         try:
             return metric[i]
         except IndexError:
             return None
 
     def fetch_data(self):
+        """Build query to fetch data from source table
+
+        Returns:
+            dict: Single day data
+        """
+
         loader = jinja2.FileSystemLoader(searchpath="./queries")
         env = jinja2.Environment(loader=loader)
         template = env.get_template("Section.sql.j2")
@@ -171,11 +249,23 @@ class Section:
         return row
 
     def build(self):
+        """Build Section components
+
+        Returns:
+            dict: Section components
+        """
+
         row = self.fetch_data()
         self.hydrate(row)
         return self.compose()
 
     def hydrate(self, row):
+        """Ingested fetched data into model
+
+        Args:
+            row (dict): Single day data
+        """
+
         for k, v in row.items():
             if k != "date":
                 for metric in self.metrics:
@@ -183,6 +273,12 @@ class Section:
                         metric = metric.update({"metric_name": k, **v})
 
     def compose(self):
+        """Compose Section components
+
+        Returns:
+            dict: Section components
+        """
+
         head = self._compose_head()
         body = self._compose_body()
         return {
@@ -203,6 +299,15 @@ class Section:
 
 class Metric(metaclass=ABCMeta):
     def __init__(self, name, agg, numerator, denominator):
+        """Initialize Metric
+
+        Args:
+            name (str): Metric name
+            agg (str): Metric aggregation (SQL)
+            numerator (str): Numerator
+            denominator (str): Denominator
+        """
+
         self.metric_name = name
         self.agg = agg
         self.title = f"*{self.metric_name}*"
@@ -211,6 +316,22 @@ class Metric(metaclass=ABCMeta):
 
     @staticmethod
     def factory(name, mode, agg, numerator, denominator):
+        """Factory Method
+
+        Args:
+            name (str): Metric name
+            mode (str): Metric mode
+            agg (str): Metric aggregation (SQL)
+            numerator (str): Numerator
+            denominator (str): Denominator
+
+        Raises:
+            NotImplementedError: On no mode specified
+
+        Returns:
+            Metric: Metric object
+        """
+
         if mode == "realtime":
             return MetricRealtime(name, agg, numerator, denominator)
         elif mode == "daily":
@@ -219,13 +340,34 @@ class Metric(metaclass=ABCMeta):
             raise NotImplementedError("Metric mode not found")
 
     def update(self, entries):
+        """Update internal data after data is fetched
+
+        Args:
+            entries (dict): Metric data entries
+
+        Returns:
+            self: self
+        """
+
         self.__dict__.update(entries)
         return self
 
     def build(self):
+        """Build Metric components
+
+        Returns:
+            dict: Metric components
+        """
+
         return self.compose()
 
     def compose(self):
+        """Compose Metric components
+
+        Returns:
+            dict: Metric components
+        """
+
         text = self._compose_text()
         body = f"{self.title}\n{text}"
         return {"type": "mrkdwn", "text": body}
@@ -235,6 +377,8 @@ class Metric(metaclass=ABCMeta):
         raise NotImplementedError
 
     def format_value(self):
+        """Format metrics value"""
+
         self.d0, self.d1, self.d2, self.mtd = [
             self._format_value(i) for i in [self.d0, self.d1, self.d2, self.mtd]
         ]
@@ -272,6 +416,12 @@ class MetricDaily(Metric):
         self.denominator = denominator
 
     def _compose_text(self):
+        """Componse Metric text body
+
+        Returns:
+            str: Text components
+        """
+
         self.compare, self.emoji = self._compare()
         self.format_value()
         dod = f"> Y-day: {self.d1}"
@@ -281,6 +431,12 @@ class MetricDaily(Metric):
         return text
 
     def _compare(self):
+        """Compare metric values
+
+        Returns:
+            tuple: (compare, emoji)
+        """
+                
         if self.d2 > 0 and self.d1 > 0:
             compare = ((self.d1 - self.d2) / self.d2) * 100
             if compare > 0:
