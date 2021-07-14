@@ -1,17 +1,10 @@
-from unittest.mock import Mock
-
-from main import main
-
+from .utils import process
 
 def test_daily():
     data = {"mode":  "daily"}
-    req = Mock(get_json=Mock(return_value=data), args=data)
-    res = main(req)
-    assert res['reports_pushed'] > 0
+    process(data)
 
 
 def test_realtime():
     data = {"mode": "realtime"}
-    req = Mock(get_json=Mock(return_value=data), args=data)
-    res = main(req)
-    assert res['reports_pushed'] > 0
+    process(data)
