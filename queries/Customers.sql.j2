@@ -1,0 +1,10 @@
+{% extends "components/metric.sql.j2" %}
+{% block root_query -%}
+SELECT
+    `TRANDATE` AS `date`,
+    COUNT(DISTINCT `CUSTOMER_PHONE`) AS `Customers`,
+FROM
+    `NetSuite`.`vn_SalesOrderLines`
+GROUP BY
+    1
+{%- endblock %}

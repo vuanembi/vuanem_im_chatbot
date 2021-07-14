@@ -1,0 +1,10 @@
+{% extends "components/metric.sql.j2" %}
+{% block root_query -%}
+SELECT
+    `TRANDATE` AS `date`,
+    SUM(`NET_AMOUNT`) AS `SalesOrder`
+FROM
+    `NetSuite`.`vn_SalesOrderLines`
+GROUP BY
+    1
+{%- endblock %}

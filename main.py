@@ -1,11 +1,10 @@
 from models import Report, Section, Metric
-from pexecute.thread import ThreadLoom
 
 # Metrics
 
 sales_order = Metric("SalesOrder")
 transactions = Metric("Transactions")
-ausp_mattress = Metric("AUSPMattress", "AVG", "SalesOrderMattress", "Quantity")
+ausp_mattress = Metric("AUSPMattress", "AVG", "SalesOrderMattress", "QuantityMattress")
 store_traffic = Metric("StoreTraffic")
 
 customers = Metric("Customers")
@@ -17,19 +16,19 @@ cogs = Metric("COGS")
 gross_profit = Metric("GrossProfit")
 gross_margin = Metric("GrossMargin", "AVG", "GrossProfit", "Sales")
 
-facebook_spend = Metric("FacebookSpend")
-google_spend = Metric("GoogleSpend")
-funnel_spend = Metric("FunnelSpend")
+# facebook_spend = Metric("FacebookSpend")
+# google_spend = Metric("GoogleSpend")
+# funnel_spend = Metric("FunnelSpend")
 
 total_leads = Metric("TotalLeads")
 unique_leads = Metric("UniqueLeads")
 phones_collected = Metric("PhonesCollected")
-cost_per_lead = Metric("CostPerLead", "AVG", "FunnelSpend", "PhonesCollected")
+# cost_per_lead = Metric("CostPerLead", "AVG", "FunnelSpend", "PhonesCollected")
 
 acquired_customers = Metric("AcquiredCustomers")
 funnel_cr = Metric("FunnelCR", "AVG", "AcquiredCustomers", "PhonesCollected")
 funnel_revenue = Metric("FunnelRevenue")
-roas = Metric("ROAS", "AVG", "FunnelRevenue", "FunnelSpend")
+# roas = Metric("ROAS", "AVG", "FunnelRevenue", "FunnelSpend")
 
 # Sections
 
@@ -38,12 +37,24 @@ sales_section = Section(
 )
 customers_section = Section("Customers", [customers, new_customers, aov_customers])
 profit_section = Section("Profit", [sales, cogs, gross_profit, gross_margin])
-spend_section = Section("Spend", [facebook_spend, google_spend, funnel_spend])
+# spend_section = Section("Spend", [facebook_spend, google_spend, funnel_spend])
 leads_section = Section(
-    "Funnel", [total_leads, unique_leads, phones_collected, cost_per_lead]
+    "Funnel",
+    [
+        total_leads,
+        unique_leads,
+        phones_collected,
+        # cost_per_lead
+    ],
 )
 conversions_section = Section(
-    "Conversions", [acquired_customers, funnel_cr, funnel_revenue, roas]
+    "Conversions",
+    [
+        acquired_customers,
+        funnel_cr,
+        funnel_revenue,
+        # roas
+    ],
 )
 
 
@@ -52,7 +63,6 @@ class ASMReportBase:
         self.name = name
         self.metrics = self.get_metrics()
         self.sections = self.get_sections()
-        self
 
     def get_metrics(self):
         return {
@@ -106,7 +116,11 @@ def report_runs(mode="daily"):
     )
     marketing_report = Report.factory(
         "Marketing",
-        [spend_section, leads_section, conversions_section],
+        [
+            # spend_section,
+            leads_section,
+            conversions_section,
+        ],
         "C027V5ABC03",
         mode,
     )
@@ -169,7 +183,7 @@ def report_runs(mode="daily"):
     if mode == "realtime":
         reports = [sales_report, *asm_reports]
     else:
-        reports = [*asm_reports]
+        reports = [sales_report, merchandising_report, marketing_report]
         reports
     return reports
 
@@ -178,14 +192,9 @@ def main(request):
     request_json = request.get_json()
     if request_json:
         reports = report_runs(request_json["mode"])
-        loom = ThreadLoom(max_runner_cap=10)
         for i in reports:
             i.run()
-            # loom.add_function(i.run)
-        responses = {
-            "push": "notifications",
-            # "results": [v["output"] for k, v in output.items()],
-        }
+        responses = {"push": "notifications", "results": [i.run() for i in reports]}
         return responses
     else:
         raise RuntimeError(request_json)

@@ -1,0 +1,13 @@
+{% extends "components/metric.sql.j2" %}
+{% block root_query -%}
+SELECT
+    s.`TRANDATE` AS `date`,
+    SUM(s.`NET_AMOUNT`) AS `Sales`,
+    (SUM(s.`NET_AMOUNT`) - SUM(c.`NET_AMOUNT`)) AS `GrossProfit`
+FROM
+    `NetSuite`.`vn_COGSLines` c
+    INNER JOIN `NetSuite`.`vn_SalesLines` s
+    ON c.`TRANDATE` = s.`TRANDATE`
+GROUP BY
+    1
+{%- endblock %}

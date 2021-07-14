@@ -1,0 +1,13 @@
+{% extends "components/metric.sql.j2" %}
+{% block root_query -%}
+SELECT
+    `TRANDATE` AS `date`,
+    SUM(`NET_AMOUNT`) AS `SalesOrder`,
+    COUNT(
+        DISTINCT `CUSTOMER_PHONE` || `LOCATION_ID`
+    ) AS `CustomersB`,
+FROM
+    `NetSuite`.`vn_SalesOrderLines`
+GROUP BY
+    1
+{%- endblock %}

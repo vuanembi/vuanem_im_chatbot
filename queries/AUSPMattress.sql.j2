@@ -1,0 +1,15 @@
+{% extends "components/metric.sql.j2" %}
+{% block root_query -%}
+SELECT
+    `TRANDATE` AS `date`,
+    SUM(
+        IF(regexp_contains(`PRODUCT_CODE`, r'^11.*'), `NET_AMOUNT`, 0)
+    ) AS `SalesOrderMattress`,
+    SUM(
+        IF(regexp_contains(`PRODUCT_CODE`, r'^11.*'), `ITEM_COUNT`, 0)
+    ) AS `QuantityMattress`
+FROM
+    `NetSuite`.`vn_SalesOrderLines`
+GROUP BY
+    1
+{%- endblock %}

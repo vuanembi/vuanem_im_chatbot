@@ -1,0 +1,16 @@
+{% extends "components/metric.sql.j2" %}
+{% block root_query -%}
+SELECT
+    `TRANDATE` AS `date`,
+    COUNT(
+        DISTINCT IF (
+            `IS_FIRST_PURCHASE` = TRUE,
+            `CUSTOMER_PHONE`,
+            NULL
+        )
+    ) AS `NewCustomers`,
+FROM
+    `NetSuite`.`vn_SalesOrderLines`
+GROUP BY
+    1
+{%- endblock %}

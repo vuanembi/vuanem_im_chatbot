@@ -1,11 +1,14 @@
 import os
 import re
+import time
 from datetime import datetime, timedelta, timezone
 from abc import abstractmethod, ABC
 
 import jinja2
 import requests
 from google.cloud import bigquery
+
+from utils import format_metric_name, format_value
 
 BQ_CLIENT = bigquery.Client()
 
@@ -33,28 +36,16 @@ class Report(ABC):
         elif mode == "daily":
             return ReportDaily(name, sections, channel_id)
 
-    def fetch_data(self):
-        """Fetch data into components
-
-        Returns:
-            list: List of results
-        """
-        template = QUERIES_ENV.get_template("Report.sql.j2")
-        rendered_query = template.render(report=self)
-        rows = BQ_CLIENT.query(rendered_query).result()
-        row = [dict(row) for row in rows][0]
-        return row["LastUpdated"], row["sections"]
+    def get_data(self):
+        jobs = [
+            metric.get_data() for section in self.sections for metric in section.metrics
+        ]
+        jobs_done = jobs
+        while jobs_done:
+            jobs_done = [job for job in jobs if job.state != "DONE"]
+            time.sleep(5)
 
     def compose(self, mode):
-        """Compose components using ingested data
-
-        Args:
-            rows (list): List of results
-
-        Returns:
-            dict: Payload
-        """
-
         payload = {}
         payload["channel"] = self.channel_id
         blocks = []
@@ -73,7 +64,7 @@ class Report(ABC):
         """
 
         title = self._compose_title()
-        prelude = self._compose_prelude(self.last_updated)
+        prelude = self._compose_prelude()
         return [title, prelude]
 
     @abstractmethod
@@ -86,16 +77,29 @@ class Report(ABC):
 
         raise NotImplementedError
 
-    def _compose_prelude(self, last_updated):
+    def _compose_prelude(self):
+        template = QUERIES_ENV.get_template("components/LastUpdated.sql.j2")
+        rendered_query = template.render()
+        rows = BQ_CLIENT.query(rendered_query)
+        row = [dict(row) for row in rows][0]
         tz = timezone(timedelta(hours=7))
-        last_updated = last_updated.astimezone(tz).strftime('%Y-%m-%dT%H:%M:%S%z')
+        last_updated = row["LastUpdated"].astimezone(tz).strftime("%Y-%m-%dT%H:%M:%S%z")
+        text = f"{last_updated}{self._compose_easter_egg()}"
         return {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"Last Updated: {last_updated}",
+                "text": text,
             },
         }
+
+    def _compose_easter_egg(self):
+        today = datetime.now(tz=timezone(timedelta(hours=7)))
+        if today.date == 15 and today.month == 5:
+            special = "\nBotBụngBự Chúc mừng sinh nhật c Trang :tada:"
+        else:
+            special = ""
+        return special
 
     def push(self, payload):
         """Push payload to Slack API
@@ -117,15 +121,13 @@ class Report(ABC):
         return res.get("ok")
 
     def run(self):
-        self.last_updated, sections = self.fetch_data()
-        self.sections = [Section.from_json(section) for section in sections]
+        self.get_data()
         payload = self.compose(self.mode)
-        res = self.push(payload)
-        return res
+        return self.push(payload)
 
 
 class ReportDaily(Report):
-    mode = 'daily'
+    mode = "daily"
 
     def __init__(self, name, sections, channel_id):
         super().__init__(name, sections, channel_id)
@@ -143,7 +145,7 @@ class ReportDaily(Report):
 
 
 class ReportRealtime(Report):
-    mode = 'realtime'
+    mode = "realtime"
 
     def __init__(self, name, sections, channel_id):
         super().__init__(name, sections, channel_id)
@@ -161,7 +163,7 @@ class ReportRealtime(Report):
 
 
 class Section:
-    def __init__(self, name, metrics, from_json=False):
+    def __init__(self, name, metrics):
         """Initialize Section
 
         Args:
@@ -171,20 +173,8 @@ class Section:
 
         self.name = name
         self.metrics = metrics
-        if from_json:
-            self.metrics = [Metric.from_json(metric) for metric in metrics]
-
-    @classmethod
-    def from_json(cls, section):
-        return cls(section["name"], section["metrics"], True)
 
     def compose(self, mode):
-        """Compose Section components
-
-        Returns:
-            dict: Section components
-        """
-
         head = self._compose_head()
         body = self._compose_body(mode)
         return {
@@ -204,7 +194,7 @@ class Section:
 
 
 class Metric:
-    def __init__(self, name, agg="SUM", numerator=None, denominator=None, values=None):
+    def __init__(self, name, agg="SUM", numerator=None, denominator=None):
         """Initialize Metric
 
         Args:
@@ -218,19 +208,21 @@ class Metric:
         self.agg = agg
         self.numerator = numerator
         self.denominator = denominator
-        self.values = values
 
-    @classmethod
-    def from_json(cls, metric):
-        return cls(metric["name"], values=metric["values"])
+    def get_data(self):
+        template = QUERIES_ENV.get_template(f"{self.name}.sql.j2")
+        rendered_query = template.render(metric=self)
+        job = BQ_CLIENT.query(rendered_query)
+        job.add_done_callback(self._callback)
+        return job
+
+    def _callback(self, job):
+        rows = job.result()
+        row = [dict(row) for row in rows][0]
+        self.values = row["metric"]["values"]
+        print(self)
 
     def compose(self, mode):
-        """Compose Metric components
-
-        Returns:
-            dict: Metric components
-        """
-
         text = self._compose_text(mode)
         body = f"{self._compose_title()}\n{text}"
         return {"type": "mrkdwn", "text": body}
@@ -239,24 +231,18 @@ class Metric:
         return f"*{self.name}*"
 
     def _compose_text(self, mode):
-        self.format_value()
-        # self.format_metric_name()
         if mode == "realtime":
             return self._compose_realtime()
         elif mode == "daily":
             return self._compose_daily()
 
     def _compose_realtime(self):
+        self.values = {k: format_value(v) for k, v in self.values.items()}
         return f"> Today: {self.values['d0']}"
 
     def _compose_daily(self):
-        """Componse Metric text body
-
-        Returns:
-            str: Text components
-        """
-
         compare, emoji = self._compare()
+        self.values = {k: format_value(v) for k, v in self.values.items()}
         dod = f"> Y-day: {self.values['d1']}"
         compare = f"> {emoji} {compare:.2f}%"
         mtd = f"> MTD : {self.values['mtd']}"
@@ -264,14 +250,10 @@ class Metric:
         return text
 
     def _compare(self):
-        """Compare metric values
-
-        Returns:
-            tuple: (compare, emoji)
-        """
-
-        if self.values['d2'] > 0 and self.values['d1'] > 0:
-            compare = ((self.values['d1'] - self.values['d2']) / self.values['d2']) * 100
+        if self.values["d2"] > 0 and self.values["d1"] > 0:
+            compare = (
+                (self.values["d1"] - self.values["d2"]) / self.values["d2"]
+            ) * 100
             if compare > 0:
                 emoji = "Tăng :small_red_triangle:"
             else:
@@ -280,31 +262,3 @@ class Metric:
             compare = 0
             emoji = "null"
         return compare, emoji
-
-    def format_value(self):
-        """Format metrics value"""
-
-        self.values['d0'], self.values['d1'], self.values['d2'], self.values['mtd'] = [
-            self._format_value(i)
-            for i in [self.values['d0'], self.values['d1'], self.values['d2'], self.values['mtd']]
-        ]
-
-    def _format_value(self, value):
-        if value is None:
-            return None
-        elif value >= 1e9:
-            return f"{value/1e9:.2f} B"
-        elif value >= 1e6:
-            return f"{value/1e6:.2f} M"
-        elif value >= 1e3:
-            return f"{value/1e3:.2f} K"
-        elif value <= 1 and value >= -1:
-            return f"{value*1e2:.2f} %"
-        elif isinstance(value, int):
-            return f"{value}"
-        else:
-            return f"{value:.2f}"
-
-    def format_metric_name(self):
-        pattern = "ASM.+(?=[A-Z])"
-        self.name = re.sub(pattern, "", self.name)
