@@ -11,9 +11,9 @@ SELECT
 FROM
     `NetSuite`.`vn_SalesOrderLines` s
     LEFT JOIN `NetSuite`.`Dim_LOCATIONS` l
-    ON s.`LOCATION_ID` = l.`LOCATION_ID` {% if filter -%}
+    ON s.`LOCATION_ID` = l.`LOCATION_ID` {% if metric.filter -%}
     WHERE
-        `ASM_ID` = {{ filter }}
+        `ASM_ID` = {{ metric.filter }}
     {%- endif %}
 GROUP BY
     1

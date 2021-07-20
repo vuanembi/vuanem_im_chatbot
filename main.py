@@ -1,3 +1,5 @@
+from pexecute.thread import ThreadLoom
+
 from models import Report, Section, Metric
 
 # Metrics
@@ -14,7 +16,9 @@ aov_customers = Metric("AOVCustomers", "AVG", "SalesOrder", "CustomersB")
 sales = Metric("Sales")
 cogs = Metric("COGS")
 gross_profit = Metric("GrossProfit")
-gross_margin = Metric("GrossMargin", "AVG", "GrossProfit", "Sales")
+gross_margin = Metric(
+    "GrossMargin", "AVG", "GrossProfit", "Sales", _format="percentage"
+)
 
 # facebook_spend = Metric("FacebookSpend")
 # google_spend = Metric("GoogleSpend")
@@ -26,7 +30,9 @@ phones_collected = Metric("PhonesCollected")
 # cost_per_lead = Metric("CostPerLead", "AVG", "FunnelSpend", "PhonesCollected")
 
 acquired_customers = Metric("AcquiredCustomers")
-funnel_cr = Metric("FunnelCR", "AVG", "AcquiredCustomers", "PhonesCollected")
+funnel_cr = Metric(
+    "FunnelCR", "AVG", "AcquiredCustomers", "PhonesCollected", _format="percentage"
+)
 funnel_revenue = Metric("FunnelRevenue")
 # roas = Metric("ROAS", "AVG", "FunnelRevenue", "FunnelSpend")
 
@@ -59,6 +65,16 @@ conversions_section = Section(
 
 
 def report_runs(mode="daily"):
+    """Create report runs
+
+    Args:
+        mode (str, optional): Mode. Defaults to "daily".
+
+    Returns:
+        list: List of reports
+    """
+
+    # * Report Channel ID
     sales_report = Report.factory(
         "Sales", [sales_section, customers_section], "C027V5CP86P", mode
     )
@@ -76,61 +92,58 @@ def report_runs(mode="daily"):
         mode,
     )
 
+    # * ASM ID & Channel ID
     ASMS = [
         {
-            "asm": "ASMHuong",
             "id": 1572,
             "report_name": "Báo cáo cho ASM Hương",
             "channel_id": "C027V5CP86P",
         },
-        # {
-        #     "asm": "ASMTung",
-        #     "id": 55737,
-        #     "report_name": "Báo cáo cho ASM Tùng",
-        #     "channel_id": "C027V5CP86P"
-        # },
-        # {
-        #     "asm": "ASMThanh",
-        #     "id": 456793,
-        #     "report_name": "Báo cáo cho ASM Thành",
-        #     "channel_id": "C027V5CP86P"
-        # },
-        # {
-        #     "asm": "ASMDuc",
-        #     "id": 134684,
-        #     "report_name": "Báo cáo cho ASM Đức",
-        #     "channel_id": "C027V5CP86P"
-        # },
-        # {
-        #     "asm": "ASMDanh",
-        #     "id": 465755,
-        #     "report_name": "Báo cáo cho ASM Danh",
-        #     "channel_id": "C027V5CP86P"
-        # },
-        # {
-        #     "asm": "ASMHien",
-        #     "id": 1575,
-        #     "report_name": "Báo cáo cho ASM Hiền",
-        #     "channel_id": "C027V5CP86P"
-        # },
-        # {
-        #     "asm": "ASMHUyen",
-        #     "id": 238459,
-        #     "report_name": "Báo cáo cho ASM Uyên",
-        #     "channel_id": "C027V5CP86P"
-        # },
-        # {
-        #     "asm": "ASMNgan",
-        #     "id": 619317,
-        #     "report_name": "Báo cáo cho ASM Ngân",
-        #     "channel_id": "C027V5CP86P"
-        # },
-        # {
-        #     "asm": "ASMThuy",
-        #     "id": 1727,
-        #     "report_name": "Báo cáo cho ASM Thuỳ",
-        #     "channel_id": "C027V5CP86P"
-        # },
+        {
+            "id": 55737,
+            "report_name": "Báo cáo cho ASM Tùng",
+            "channel_id": "C027V5CP86P",
+        },
+        {
+            "id": 456793,
+            "report_name": "Báo cáo cho ASM Thành",
+            "channel_id": "C027V5CP86P",
+        },
+        {
+            "id": 134684,
+            "report_name": "Báo cáo cho ASM Đức",
+            "channel_id": "C027V5CP86P",
+        },
+        {
+            "id": 465755,
+            "report_name": "Báo cáo cho ASM Danh",
+            "channel_id": "C027V5CP86P",
+        },
+        {
+            "id": 1575,
+            "report_name": "Báo cáo cho ASM Hiền",
+            "channel_id": "C027V5CP86P",
+        },
+        {
+            "id": 238459,
+            "report_name": "Báo cáo cho ASM Uyên",
+            "channel_id": "C027V5CP86P",
+        },
+        {
+            "id": 619317,
+            "report_name": "Báo cáo cho ASM Ngân",
+            "channel_id": "C027V5CP86P",
+        },
+        {
+            "id": 1727,
+            "report_name": "Báo cáo cho ASM Thuỳ",
+            "channel_id": "C027V5CP86P",
+        },
+        {
+            "id": 617334,
+            "report_name": "Báo cáo cho ASM Hảo",
+            "channel_id": "C027V5CP86P",
+        },
     ]
 
     asm_reports = [
@@ -140,29 +153,29 @@ def report_runs(mode="daily"):
                 Section(
                     "Sales",
                     [
-                        Metric("SalesOrder", filter=ASM["id"]),
-                        Metric("Transactions", filter=ASM["id"]),
+                        Metric("SalesOrder", _filter=ASM["id"]),
+                        Metric("Transactions", _filter=ASM["id"]),
                         Metric(
                             "AUSPMattress",
                             "AVG",
                             "SalesOrderMattress",
                             "QuantityMattress",
-                            filter=ASM["id"],
+                            _filter=ASM["id"],
                         ),
-                        Metric("StoreTraffic", filter=ASM["id"]),
+                        Metric("StoreTraffic", _filter=ASM["id"]),
                     ],
                 ),
                 Section(
                     "Customers",
                     [
-                        Metric("Customers", filter=ASM["id"]),
-                        Metric("NewCustomers", filter=ASM["id"]),
+                        Metric("Customers", _filter=ASM["id"]),
+                        Metric("NewCustomers", _filter=ASM["id"]),
                         Metric(
                             "AOVCustomers",
                             "AVG",
                             "SalesOrder",
                             "CustomersB",
-                            filter=ASM["id"],
+                            _filter=ASM["id"],
                         ),
                     ],
                 ),
@@ -177,17 +190,31 @@ def report_runs(mode="daily"):
         reports = [sales_report, *asm_reports]
     else:
         reports = [sales_report, merchandising_report, marketing_report, *asm_reports]
-        reports
     return reports
 
 
 def main(request):
+    """API Gateway
+
+    Args:
+        request (flask.Request): HTTP request
+
+    Raises:
+        RuntimeError: No mode found
+
+    Returns:
+        dict: Job responses
+    """
+
     request_json = request.get_json()
     if request_json:
         reports = report_runs(request_json["mode"])
+        loom = ThreadLoom(max_runner_cap=10)
         for i in reports:
-            i.run()
-        responses = {"push": "notifications", "results": [i.run() for i in reports]}
+            loom.add_function(i.run)
+        # results = [i.run() for i in reports]
+        results = [v["output"] for k, v in loom.execute().items()]
+        responses = {"push": "notifications", "results": results}
         return responses
     else:
         raise RuntimeError(request_json)

@@ -28,7 +28,7 @@ jobs:
           --region=${{ env.REGION }}
           --timeout=530
           --project=${{ secrets.PROJECT_ID }}
-          --memory=256MB
+          --memory=512MB
           --runtime=python38
           --trigger-http
           --service-account=${{ secrets.GCP_SA }}

@@ -8,8 +8,8 @@ FROM
     INNER JOIN `NetSuite`.`Dim_LOCATIONS` l
     ON s.`LOCATION_ID` = l.`LOCATION_ID`
 WHERE
-    `ASM_ID` <> 309811 {% if filter -%}
-        AND `ASM_ID` = {{ filter }}
+    `ASM_ID` <> 309811 {% if metric.filter -%}
+        AND `ASM_ID` = {{ metric.filter }}
     {%- endif %}
 GROUP BY
     1
