@@ -58,55 +58,6 @@ conversions_section = Section(
 )
 
 
-class ASMReportBase:
-    def __init__(self, name):
-        self.name = name
-        self.metrics = self.get_metrics()
-        self.sections = self.get_sections()
-
-    def get_metrics(self):
-        return {
-            "sales_order": Metric(f"{self.name}SalesOrder"),
-            "transactions": Metric(f"{self.name}Transactions"),
-            "ausp_mattress": Metric(
-                f"{self.name}AUSPMattress",
-                "AVG",
-                f"{self.name}SalesOrderMattress",
-                f"{self.name}Quantity",
-            ),
-            "store_traffic": Metric(f"{self.name}StoreTraffic"),
-            "customers": Metric(f"{self.name}Customers"),
-            "new_customers": Metric(f"{self.name}NewCustomers"),
-            "aov_customers": Metric(
-                f"{self.name}AOVCustomers",
-                "AVG",
-                f"{self.name}SalesOrder",
-                f"{self.name}CustomersB",
-            ),
-        }
-
-    def get_sections(self):
-        return [
-            Section(
-                "Sales",
-                [
-                    self.metrics["sales_order"],
-                    self.metrics["transactions"],
-                    self.metrics["ausp_mattress"],
-                    self.metrics["store_traffic"],
-                ],
-            ),
-            Section(
-                "KhachHang",
-                [
-                    self.metrics["customers"],
-                    self.metrics["new_customers"],
-                    self.metrics["aov_customers"],
-                ],
-            ),
-        ]
-
-
 def report_runs(mode="daily"):
     sales_report = Report.factory(
         "Sales", [sales_section, customers_section], "C027V5CP86P", mode
@@ -128,62 +79,104 @@ def report_runs(mode="daily"):
     ASMS = [
         {
             "asm": "ASMHuong",
+            "id": 1572,
             "report_name": "Báo cáo cho ASM Hương",
             "channel_id": "C027V5CP86P",
         },
         # {
         #     "asm": "ASMTung",
+        #     "id": 55737,
         #     "report_name": "Báo cáo cho ASM Tùng",
         #     "channel_id": "C027V5CP86P"
         # },
         # {
         #     "asm": "ASMThanh",
-        #     "report_name": "Báo cáo cho ASM Thanh",
+        #     "id": 456793,
+        #     "report_name": "Báo cáo cho ASM Thành",
         #     "channel_id": "C027V5CP86P"
         # },
         # {
         #     "asm": "ASMDuc",
+        #     "id": 134684,
         #     "report_name": "Báo cáo cho ASM Đức",
         #     "channel_id": "C027V5CP86P"
         # },
         # {
         #     "asm": "ASMDanh",
+        #     "id": 465755,
         #     "report_name": "Báo cáo cho ASM Danh",
         #     "channel_id": "C027V5CP86P"
         # },
         # {
         #     "asm": "ASMHien",
+        #     "id": 1575,
         #     "report_name": "Báo cáo cho ASM Hiền",
         #     "channel_id": "C027V5CP86P"
         # },
         # {
         #     "asm": "ASMHUyen",
+        #     "id": 238459,
         #     "report_name": "Báo cáo cho ASM Uyên",
         #     "channel_id": "C027V5CP86P"
         # },
         # {
         #     "asm": "ASMNgan",
+        #     "id": 619317,
         #     "report_name": "Báo cáo cho ASM Ngân",
         #     "channel_id": "C027V5CP86P"
         # },
         # {
         #     "asm": "ASMThuy",
+        #     "id": 1727,
         #     "report_name": "Báo cáo cho ASM Thuỳ",
         #     "channel_id": "C027V5CP86P"
         # },
     ]
 
-    asm_reports = []
-    for ASM in ASMS:
-        asm = ASMReportBase(ASM["asm"])
-        asm_reports.append(
-            Report.factory(ASM["report_name"], asm.sections, ASM["channel_id"], mode)
+    asm_reports = [
+        Report.factory(
+            ASM["report_name"],
+            [
+                Section(
+                    "Sales",
+                    [
+                        Metric("SalesOrder", filter=ASM["id"]),
+                        Metric("Transactions", filter=ASM["id"]),
+                        Metric(
+                            "AUSPMattress",
+                            "AVG",
+                            "SalesOrderMattress",
+                            "QuantityMattress",
+                            filter=ASM["id"],
+                        ),
+                        Metric("StoreTraffic", filter=ASM["id"]),
+                    ],
+                ),
+                Section(
+                    "Customers",
+                    [
+                        Metric("Customers", filter=ASM["id"]),
+                        Metric("NewCustomers", filter=ASM["id"]),
+                        Metric(
+                            "AOVCustomers",
+                            "AVG",
+                            "SalesOrder",
+                            "CustomersB",
+                            filter=ASM["id"],
+                        ),
+                    ],
+                ),
+            ],
+            ASM["channel_id"],
+            mode,
         )
+        for ASM in ASMS
+    ]
 
     if mode == "realtime":
         reports = [sales_report, *asm_reports]
     else:
-        reports = [sales_report, merchandising_report, marketing_report]
+        reports = [sales_report, merchandising_report, marketing_report, *asm_reports]
         reports
     return reports
 

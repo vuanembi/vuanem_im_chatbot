@@ -1,16 +1,21 @@
 {% extends "components/metric.sql.j2" %}
 {% block root_query -%}
 SELECT
-    `TRANDATE` AS `date`,
+    s.`TRANDATE` AS `date`,
     COUNT(
         DISTINCT IF (
-            `IS_FIRST_PURCHASE` = TRUE,
-            `CUSTOMER_PHONE`,
+            s.`IS_FIRST_PURCHASE` = TRUE,
+            s.`CUSTOMER_PHONE`,
             NULL
         )
     ) AS `NewCustomers`,
 FROM
-    `NetSuite`.`vn_SalesOrderLines`
+    `NetSuite`.`vn_SalesOrderLines` s
+    LEFT JOIN `NetSuite`.`Dim_LOCATIONS` l
+    ON s.`LOCATION_ID` = l.`LOCATION_ID` {% if filter -%}
+    WHERE
+        `ASM_ID` = {{ filter }}
+    {%- endif %}
 GROUP BY
     1
 {%- endblock %}

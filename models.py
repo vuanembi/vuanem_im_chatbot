@@ -1,5 +1,4 @@
 import os
-import re
 import time
 from datetime import datetime, timedelta, timezone
 from abc import abstractmethod, ABC
@@ -194,7 +193,7 @@ class Section:
 
 
 class Metric:
-    def __init__(self, name, agg="SUM", numerator=None, denominator=None):
+    def __init__(self, name, agg="SUM", numerator=None, denominator=None, filter=None):
         """Initialize Metric
 
         Args:

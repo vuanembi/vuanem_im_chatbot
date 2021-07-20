@@ -1,15 +1,20 @@
 {% extends "components/metric.sql.j2" %}
 {% block root_query -%}
 SELECT
-    `TRANDATE` AS `date`,
+    s.`TRANDATE` AS `date`,
     SUM(
-        IF(regexp_contains(`PRODUCT_CODE`, r'^11.*'), `NET_AMOUNT`, 0)
+        IF(regexp_contains(s.`PRODUCT_CODE`, r'^11.*'), s.`NET_AMOUNT`, 0)
     ) AS `SalesOrderMattress`,
     SUM(
-        IF(regexp_contains(`PRODUCT_CODE`, r'^11.*'), `ITEM_COUNT`, 0)
+        IF(regexp_contains(s.`PRODUCT_CODE`, r'^11.*'), s.`ITEM_COUNT`, 0)
     ) AS `QuantityMattress`
 FROM
-    `NetSuite`.`vn_SalesOrderLines`
+    `NetSuite`.`vn_SalesOrderLines` s
+    LEFT JOIN `NetSuite`.`Dim_LOCATIONS` l
+    ON s.`LOCATION_ID` = l.`LOCATION_ID` {% if filter -%}
+    WHERE
+        `ASM_ID` = {{ filter }}
+    {%- endif %}
 GROUP BY
     1
 {%- endblock %}
