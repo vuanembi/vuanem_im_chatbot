@@ -489,5 +489,375 @@
         },
         "previous_names": [],
         "num_members": 1
+    },
+    {
+        "id": "C02899T84KZ",
+        "name": "metrics-asmduc",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626838533,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "metrics-asmduc",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U02221L9S87",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": true,
+        "is_private": true,
+        "is_mpim": false,
+        "topic": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "purpose": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "num_members": 4
+    },
+    {
+        "id": "C02899VG05V",
+        "name": "metrics-asmuyen",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626838622,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "metrics-asmuyen",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U02221L9S87",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": true,
+        "is_private": true,
+        "is_mpim": false,
+        "topic": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "purpose": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "num_members": 4
+    },
+    {
+        "id": "C028M132H37",
+        "name": "metrics-asmhao",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626838649,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "metrics-asmhao",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U02221L9S87",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": true,
+        "is_private": true,
+        "is_mpim": false,
+        "topic": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "purpose": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "num_members": 4
+    },
+    {
+        "id": "C028M144UMT",
+        "name": "metrics-asmthuy",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626838692,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "metrics-asmthuy",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U02221L9S87",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": true,
+        "is_private": true,
+        "is_mpim": false,
+        "topic": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "purpose": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "num_members": 4
+    },
+    {
+        "id": "C028Q7K327M",
+        "name": "metrics-asmtung",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626838442,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "metrics-asmtung",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U02221L9S87",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": true,
+        "is_private": true,
+        "is_mpim": false,
+        "topic": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "purpose": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "num_members": 4
+    },
+    {
+        "id": "C028Q7KE20K",
+        "name": "metrics-asmthanh",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626838458,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "metrics-asmthanh",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U02221L9S87",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": true,
+        "is_private": true,
+        "is_mpim": false,
+        "topic": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "purpose": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "num_members": 4
+    },
+    {
+        "id": "C028Q7ZQHD1",
+        "name": "metrics-sales",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626839021,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "metrics-sales",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U02221L9S87",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": true,
+        "is_private": true,
+        "is_mpim": false,
+        "topic": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "purpose": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "num_members": 4
+    },
+    {
+        "id": "C028W7NB79A",
+        "name": "metrics-asmdanh",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626838556,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "metrics-asmdanh",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U02221L9S87",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": true,
+        "is_private": true,
+        "is_mpim": false,
+        "topic": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "purpose": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "num_members": 4
+    },
+    {
+        "id": "C0292LYDT4H",
+        "name": "metrics-asmhien",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626838592,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "metrics-asmhien",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U02221L9S87",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": true,
+        "is_private": true,
+        "is_mpim": false,
+        "topic": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "purpose": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "num_members": 4
+    },
+    {
+        "id": "C029DN1LNLQ",
+        "name": "metrics-asmngan",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626838673,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "metrics-asmngan",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U02221L9S87",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": true,
+        "is_private": true,
+        "is_mpim": false,
+        "topic": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "purpose": {
+            "value": "",
+            "creator": "",
+            "last_set": 0
+        },
+        "num_members": 4
     }
 ]

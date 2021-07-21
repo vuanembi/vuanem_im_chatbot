@@ -76,7 +76,7 @@ def report_runs(mode="daily"):
 
     # * Report Channel ID
     sales_report = Report.factory(
-        "Sales", [sales_section, customers_section], "C027V5CP86P", mode
+        "Sales", [sales_section, customers_section], "C028Q7ZQHD1", mode
     )
     merchandising_report = Report.factory(
         "Merchandising", [profit_section], "C025E8MVDR7", mode
@@ -102,47 +102,47 @@ def report_runs(mode="daily"):
         {
             "id": 55737,
             "report_name": "Báo cáo cho ASM Tùng",
-            "channel_id": "C027V5CP86P",
+            "channel_id": "C028Q7K327M",
         },
         {
             "id": 456793,
             "report_name": "Báo cáo cho ASM Thành",
-            "channel_id": "C027V5CP86P",
+            "channel_id": "C028Q7KE20K",
         },
         {
             "id": 134684,
             "report_name": "Báo cáo cho ASM Đức",
-            "channel_id": "C027V5CP86P",
+            "channel_id": "C02899T84KZ",
         },
         {
             "id": 465755,
             "report_name": "Báo cáo cho ASM Danh",
-            "channel_id": "C027V5CP86P",
+            "channel_id": "C028W7NB79A",
         },
         {
             "id": 1575,
             "report_name": "Báo cáo cho ASM Hiền",
-            "channel_id": "C027V5CP86P",
+            "channel_id": "C0292LYDT4H",
         },
         {
             "id": 238459,
             "report_name": "Báo cáo cho ASM Uyên",
-            "channel_id": "C027V5CP86P",
+            "channel_id": "C02899VG05V",
         },
         {
             "id": 619317,
             "report_name": "Báo cáo cho ASM Ngân",
-            "channel_id": "C027V5CP86P",
+            "channel_id": "C029DN1LNLQ",
         },
         {
             "id": 1727,
             "report_name": "Báo cáo cho ASM Thuỳ",
-            "channel_id": "C027V5CP86P",
+            "channel_id": "C028M144UMT",
         },
         {
             "id": 617334,
             "report_name": "Báo cáo cho ASM Hảo",
-            "channel_id": "C027V5CP86P",
+            "channel_id": "C028M132H37",
         },
     ]
 
@@ -189,7 +189,12 @@ def report_runs(mode="daily"):
     if mode == "realtime":
         reports = [sales_report, *asm_reports]
     else:
-        reports = [sales_report, merchandising_report, marketing_report, *asm_reports]
+        reports = [
+            sales_report,
+            merchandising_report,
+            marketing_report,
+            *asm_reports
+        ]
     return reports
 
 
