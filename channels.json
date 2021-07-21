@@ -37,7 +37,7 @@
         "previous_names": [
             "general"
         ],
-        "num_members": 145
+        "num_members": 149
     },
     {
         "id": "C8CFT59DL",
@@ -263,7 +263,7 @@
             "last_set": 1622454088
         },
         "previous_names": [],
-        "num_members": 3
+        "num_members": 4
     },
     {
         "id": "C025E8MVDR7",
@@ -413,6 +413,44 @@
             "last_set": 1626141143
         },
         "num_members": 5
+    },
+    {
+        "id": "C027VHV8QGJ",
+        "name": "agile-500ch",
+        "is_channel": true,
+        "is_group": false,
+        "is_im": false,
+        "created": 1626160169,
+        "is_archived": false,
+        "is_general": false,
+        "unlinked": 0,
+        "name_normalized": "agile-500ch",
+        "is_shared": false,
+        "parent_conversation": null,
+        "creator": "U021SNXLSSF",
+        "is_ext_shared": false,
+        "is_org_shared": false,
+        "shared_team_ids": [
+            "T84ARBN1E"
+        ],
+        "pending_shared": [],
+        "pending_connected_team_ids": [],
+        "is_pending_ext_shared": false,
+        "is_member": false,
+        "is_private": false,
+        "is_mpim": false,
+        "topic": {
+            "value": "Link Sprint review: <https://bit.ly/2RAP9kR>\nLink Sprint Retro: <https://bit.ly/3yrAsRW>\nLink Sprint planning: <https://bit.ly/3bHT9Hj>",
+            "creator": "U021SNXLSSF",
+            "last_set": 1626160367
+        },
+        "purpose": {
+            "value": "Group chat c\u1ee7a d\u1ef1 \u00e1n m\u1edf m\u1edbi &amp; c\u1ea3i ti\u1ebfn c\u1eeda h\u00e0ng v\u1edbi 2 m\u1ee5c ti\u00eau:\n(i) \u0110\u1ea3m b\u1ea3o ti\u1ebfn \u0111\u1ed9 m\u1edf m\u1edbi\n(ii) C\u1eeda h\u00e0ng m\u1edf m\u1edbi \u0111\u1ea1t target EBITDA",
+            "creator": "U021SNXLSSF",
+            "last_set": 1626160224
+        },
+        "previous_names": [],
+        "num_members": 9
     },
     {
         "id": "C027VUUNMK6",
