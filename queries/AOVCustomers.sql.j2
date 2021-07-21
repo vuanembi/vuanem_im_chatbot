@@ -1,0 +1,20 @@
+{% extends "components/metric.sql.j2" %}
+{% block root_query -%}
+SELECT
+    s.`TRANDATE` AS `date`,
+    SUM(
+        s.`NET_AMOUNT`
+    ) AS `SalesOrder`,
+    COUNT(
+        DISTINCT s.`CUSTOMER_PHONE` || s.`LOCATION_ID`
+    ) AS `CustomersB`,
+FROM
+    `NetSuite`.`vn_SalesOrderLines` s
+    LEFT JOIN `NetSuite`.`Dim_LOCATIONS` l
+    ON s.`LOCATION_ID` = l.`LOCATION_ID` {% if metric.filter -%}
+    WHERE
+        `ASM_ID` = {{ metric.filter }}
+    {%- endif %}
+GROUP BY
+    1
+{%- endblock %}

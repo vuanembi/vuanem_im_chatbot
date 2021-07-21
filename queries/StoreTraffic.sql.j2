@@ -1,0 +1,16 @@
+{% extends "components/metric.sql.j2" %}
+{% block root_query -%}
+SELECT
+    s.`DATE_0` AS `date`,
+    SUM(s.`TOTAL_TIMES_OF_VISITING`) AS `StoreTraffic`
+FROM
+    `NetSuite`.`STORE_TRAFFIC` s
+    INNER JOIN `NetSuite`.`Dim_LOCATIONS` l
+    ON s.`LOCATION_ID` = l.`LOCATION_ID`
+WHERE
+    `ASM_ID` <> 309811 {% if metric.filter -%}
+        AND `ASM_ID` = {{ metric.filter }}
+    {%- endif %}
+GROUP BY
+    1
+{%- endblock %}

@@ -1,0 +1,35 @@
+{% extends "components/metric.sql.j2" %}
+{% block root_query -%}
+SELECT
+    `Sales`.`date`,
+    `Sales`.`Sales`,
+    (`Sales`.`Sales` - `COGS`.`COGS`) AS `GrossProfit`
+FROM
+    (
+        SELECT
+            `TRANDATE` AS `date`,
+            SUM(
+                `NET_AMOUNT`
+            ) AS `Sales`,
+        FROM
+            `NetSuite`.`vn_SalesLines`
+        GROUP BY
+            1
+    ) `Sales`
+    JOIN (
+        SELECT
+            `TRANDATE` AS `date`,
+            SUM(
+                `NET_AMOUNT`
+            ) AS `COGS`,
+        FROM
+            `NetSuite`.`vn_COGSLines`
+        GROUP BY
+            1
+    ) `COGS`
+    ON DATE(
+        `Sales`.`date`
+    ) = DATE(
+        `COGS`.`date`
+    )
+{%- endblock %}

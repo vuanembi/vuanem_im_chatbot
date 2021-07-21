@@ -1,0 +1,15 @@
+{% extends "components/metric.sql.j2" %}
+{% block root_query -%}
+SELECT
+    TIMESTAMP_TRUNC(
+        `dt`,
+        DAY
+    ) AS `date`,
+    COUNT(DISTINCT f4.`phone`) AS `PhonesCollected`,
+FROM
+    `Analytics`.`Funnel4` f4
+    LEFT JOIN `Analytics`.`Funnel4_Revenue` fr
+    ON f4.`marketing_id` = fr.`last_marketing_id`
+GROUP BY
+    1
+{%- endblock %}

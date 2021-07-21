@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-python-dotenv = "*"
 requests = "*"
 google-cloud-bigquery = "*"
 jinja2 = "*"
@@ -13,8 +12,6 @@ parallel-execute = "*"
 [dev-packages]
 black = "*"
 pytest = "*"
-functions-framework = "*"
-pytest-dotenv = "*"
 
 [requires]
 python_version = "3.8"
